@@ -1,0 +1,78 @@
+<div class = "user_tickets" style = "background: #dadde6;">
+	<div class = "row flex justify-content-center xx m-1">
+		<div class="card-header bg-black text-center  py-2 mb-3" style="color: #ff0000; display: flex; justify-content: space-evenly; align-items: center;">
+			<h5>Your Bookings</h5>
+			<% if @bookings.any? %>
+				<%= link_to "Download PDF", pdf_download_path, class: "btn btn-outline-light username_link", data: { turbo: :false } %>
+			<% end %>
+		</div>
+		
+		<section class="container">
+			<div class="row flex justify-content-center p-1 " style= "">
+				<% @bookings.each do |b| %>
+					<%= turbo_frame_tag "reservation_#{b["r_id"]}", class: "col-12 col-md-5 col-xl-4 col xxl-2 fl-left p-0 m-0 justify-content-center", style: " display: flex;  padding: 10px !important;" do %>
+						<article class="card" style = "border: none; ">
+							<section class="date">
+								<time datetime="23th feb">
+									<span> <%= b["s_n"] %></span><span>seat</span><span>#<%= b["r_id"] %></span>
+								</time>
+							</section>
+
+							<section class="card-cont" >
+								<small class = "small">NeoGo PingBus</small>
+								<h3><i class="fa-solid fa-user"></i> <%= b["u_name"] %></h3>
+								<div class="even-date">
+									<span>Bus No: <%= b["b_r_n"] %> </span>
+									<span>Bus Name: <%= b["b_n"] %></span>
+									<span>Route: <%= b["b_r"] %></span>
+									<span>Departure: 11:00 PM</span>
+									<span>Arrival: 2:00 AM</span>
+									<span>Journey Date: <%= b["j_date"].to_date.strftime("%d %B, %Y  %A") %> </span>
+								</div>
+								<%= link_to "Cancel", bus_reservation_path(b["b_id"], b["r_id"]), class: "btn-outline-danger", data: { 'turbo-method': :delete, turbo_frame: "_top", controller: "alert", alert_target: "btn", action: "click->alert#confirmation", alert_text_value: "You are about to cancel the ticket.", alert_confirm_value: "Yes, cancel it!", alert_cancel_value: "No, keep it" } %> 
+							</section>
+						</article>
+					<% end %>
+				<% end %>
+			</div>
+		</section>
+	</div>
+</div>
+
+
+
+
+<!--  
+<div class = "container mt-4">
+	<div class = "row flex justify-content-center m-4 shadow xx">
+		<div class="card-header bg-black text-center xx py-2 mb-3" style="color: #ff0000; display: flex; justify-content: space-evenly; align-items: center;">
+  		<h5>Your Bookings</h5>
+			<% if @bookings.any? %>
+  			<%= link_to "Download PDF", pdf_download_path, class: "btn btn-outline-light username_link", data: { turbo: :false } %>
+			<% end %>
+		</div>
+
+		<% @bookings.each do |b| %>
+			<%= turbo_frame_tag "reservation_#{b["r_id"]}", class: "col-md-5 col-xl-4 mb-4" do %>
+				<div class = "card mt-2" style = "border: 1px solid #ced4da; border-radius: 8px;">
+					<div class = "card-header xx bg-black text-center py-2" style = "color: #00ff00;">
+						<h6>Ticket ID:  <%= b["r_id"] %> </h6>
+					</div>
+					<div class = "card-body">
+						<p class = "card-text m-0"><strong>Bus Number:</strong> <%= b["b_r_n"] %></p>
+						<p class = "card-text m-0"><strong>Bus Name:</strong> <%= b["b_n"] %></p>
+						<p class = "card-text m-0"><strong>Bus Route:</strong> <%= b["b_r"] %></p>
+						<p class = "card-text m-0"><strong>Seat No:</strong> <%= b["s_n"] %></p>
+						<p class = "card-text m-0"><strong>Journey Date:</strong> <%= b["j_date"].to_date.strftime("%d %B, %Y  %A") %></p>
+						<p class = "card-text m-0"><strong>Passenger ID:</strong> <%= b["u_id"] %></p>
+						<p class = "card-text m-0"><strong>Passenger Name:</strong> <%= b["u_name"] %></p>
+					</div>
+					<div class = "card-footer text-center">	
+						<%= link_to "Cancel Ticket", bus_reservation_path(b["b_id"], b["r_id"]), class: "btn btn-outline-danger", data: { 'turbo-method': :delete, turbo_frame: "_top", controller: "alert", alert_target: "btn", action: "click->alert#confirmation", alert_text_value: "You are about to cancel the ticket.", alert_confirm_value: "Yes, cancel it!", alert_cancel_value: "No, keep it" } %> 
+					</div>
+				</div>
+			<% end %>
+		<% end %>
+	</div>
+</div>
+-->

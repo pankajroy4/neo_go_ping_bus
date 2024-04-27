@@ -1,0 +1,62 @@
+  <% reservations.each do |r| %>
+    <div class="ticket text-center">
+      <div class="ticket-header text-center">
+        <h1>NeoGo Pingbus Reservation Ticket</h1>
+      </div>
+      <div>
+        <table>
+          <tr>
+            <td>
+              <div class = "ticket_container">
+
+                <div class="cardWrap">
+                  <div class="card cardLeft">
+                    <h1 class = "head">NeoGO PingBus </h1>
+                    <div class="bus_no">
+                      <span>Bus: <%= r["b_r_n"] %></span> 
+                      
+                    </div>
+                    <div class="name">
+                     <span> <%= r["b_n"] %></span>
+                    </div>
+                    <div class="name">
+                      <span><%= r["u_name"] %></span>
+                    </div>
+
+                    <div class="date">
+                      <span>Date : <%= r["j_date"].to_date.strftime("%d %B, %Y  %A") %></span>
+                    </div>
+                    <div class="route">
+                      <span> <%= r["b_r"] %></span>
+                    </div>				
+                    <div class="time">
+                      <span>Departure: 11:00 PM</span>
+                    </div>
+                  </div>
+
+                  <div class="card cardRight">
+                    <div class="bc"></div>
+                    <div class="eye"></div>
+                    <div class="number">
+                      <h2> <%= r["s_n"] %></h2>
+                      <span>seat</span>
+                    </div>
+
+                    <div class="t_id" style="line-height: 0.8; width: 13em; margin: 0 auto; text-align: center;">
+                      <p style = "margin-top: .7em;">#<%= r["r_id"] %></p>
+                    </div>
+                    <div class="barcode" style = "line-height: 0.8;"></div>
+                  </div>
+                </div>
+
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    <div class="ticket-footer text-center">
+      <span>Thank you for choosing NeoGo Pingbus!</span>
+    </div>
+  </div>    
+<%end%>
+

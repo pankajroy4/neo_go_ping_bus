@@ -1,0 +1,29 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>NeoGoPingBus</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="turbo-prefetch" content="false">
+    <!-- <meta name="view-transition" content="same-origin"> -->
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= favicon_link_tag "bus_logo2" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body style = "padding-right: 0px;">
+    <div id = "navbar" >
+      <%= render "layouts/header" %>
+    </div>
+    <div class="flash" id="flash">
+      <%= render "layouts/flash" %>
+    </div>
+    <div id = "home" >
+      <%= yield %>
+    </div>
+  </body>
+</html>
+

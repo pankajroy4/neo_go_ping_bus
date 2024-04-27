@@ -1,0 +1,513 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+*::selection {
+  background-color: black;
+  color: red;
+}
+
+nav .navbar-nav li a {
+  color: white !important;
+}
+
+.alert {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.myalert {
+  margin: 0 !important;
+  padding: 0 !important;
+  flex-direction: column !important;
+}
+
+.btn:hover {
+  color: black !important;
+}
+
+.username {
+  display: flex;
+  align-items: center;
+}
+
+.username_link {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  margin-right: 3px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 3rem white inset !important;
+}
+
+.image img {
+  width: 200px;
+  height: 100px;
+}
+
+.form_img {
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: #393f81;
+}
+
+nav {
+  background-color: #e65646 !important;
+}
+
+.dropdown-menu,
+.dropdown-item:active {
+  background-color: #dc6c60 !important;
+}
+
+.dropdown-menu li:hover {
+  background-color: white !important;
+}
+
+.dropdown-item:hover {
+  color: black !important;
+}
+
+.shadow {
+  filter: drop-shadow(10px 10px 20px rgb(87, 87, 87));
+}
+
+// body::-webkit-scrollbar {
+//   background-color: transparent;
+//   width: 8px;
+//   border-radius: 10px;
+// }
+
+.custom_alert {
+  display: none;
+}
+
+.signout {
+  margin: 5px;
+}
+
+.navbar-toggler:hover {
+  background-color: white !important;
+}
+
+.btn-outline-danger:hover,
+.btn-outline-success:hover {
+  color: white !important;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: rgb(230, 86, 70);
+  border: inset 1px #ff7465;
+  border-radius: 10px;
+}
+
+.xx {
+  border-top-left-radius: 10px !important;
+  border-top-right-radius: 10px !important;
+}
+
+.date_label {
+  margin-left: 20px;
+}
+
+.datepicker {
+  width: 180px;
+  margin: 0 20px 20px 20px;
+}
+
+.datepicker>span:hover {
+  cursor: pointer;
+}
+
+.myclass {
+  padding: 10px;
+}
+
+.card {
+  border: none;
+  // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #f8f9fa;
+}
+
+.search {
+  border-radius: 5px !important;
+}
+
+.btn,
+.rightRound,
+.leftRound {
+  transition: all ease 0.2s !important;
+}
+
+.btn:active,
+.rightRound:active,
+.leftRound:active {
+  scale: 0.9 !important;
+}
+
+// ======================================Flash messages design ==============================
+@keyframes appear-then-fade {
+
+  0%,
+  100% {
+    opacity: 0
+  }
+
+  5%,
+  60% {
+    opacity: 1
+  }
+}
+
+.flash,
+.errors {
+  position: fixed;
+  top: 5rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  z-index: 1000 !important;
+  max-width: 100%;
+  width: max-content;
+  padding: 0 1rem;
+
+  &__message {
+    font-size: 0.875rem;
+    color: hsl(0, 0%, 100%);
+    padding: 0.5rem 1rem;
+    animation: appear-then-fade 8s both;
+    border-radius: 10px;
+    z-index: 2000 !important;
+
+  }
+}
+
+.turbo-progress-bar {
+  background: linear-gradient(to right, green, blue, red);
+}
+
+// ====================form fileds with validation error design ==================
+.field_with_errors input {
+  border: 1px solid red !important;
+}
+
+.field_with_errors input:focus {
+  box-shadow: 0 0 0 0.20rem rgba(236, 17, 17, 0.336) !important;
+}
+
+// =======================================Profile picture style =========================
+.profile {
+  border-top-left-radius: .5rem;
+  border-bottom-left-radius: .5rem;
+  background-color: #F8F8FF;
+  border-right-style: inset;
+}
+
+.profile-pic {
+  border: 3px solid transparent;
+  border-radius: 50%;
+  background: linear-gradient(to right, red, orange, yellow, green, blue, indigo, violet);
+  backdrop-filter: blur(10px);
+}
+
+.upload {
+  width: 200px;
+  position: relative;
+  margin: auto;
+  text-align: center;
+}
+
+.upload .rightRound {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.664);
+}
+
+.upload .leftRound {
+  position: absolute;
+  background: rgba(230, 86, 70, 0.801);
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.664);
+}
+
+.upload .rightConf {
+  background: rgba(42, 207, 64, 0.801);
+}
+
+.upload .rightUp {
+  background: rgba(3, 103, 218, 0.801);
+}
+
+.upload .rightEdit {
+  // background: rgba(173, 172, 172, 0.801);
+  background: rgba(255, 255, 255, 0.801);
+}
+
+.upload .midCancel {
+  background: rgba(173, 172, 172, 0.801);
+}
+
+.fa,
+.fas,
+.fa-pencil,
+.fa-trash,
+.fa-upload {
+  color: white;
+  cursor: pointer;
+}
+
+.fa-pencil {
+  color: black;
+}
+
+.upload input {
+  opacity: 0;
+}
+
+.upload input::-webkit-file-upload-button {
+  cursor: pointer;
+}
+
+#upload,
+#confirm,
+#edit {
+  margin-left: 177px;
+  margin-top: -80px;
+}
+
+#cancel,
+#delete {
+  margin-left: -8px;
+  margin-top: -77px;
+}
+
+#cancel2 {
+  margin-left: 85px;
+  margin-top: -16px;
+}
+
+.fa-spinner {
+  color: red;
+  font-size: 2em;
+  border-radius: 50%;
+}
+
+// ====================================== Seat Design ===============================
+.seat_label input[type="checkbox"] {
+  display: none;
+}
+
+.seat_label label {
+
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  ;
+  margin: 8px;
+  text-align: center;
+  line-height: 60px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  background-color: whitesmoke;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.seat_label input[type="checkbox"]:disabled+label {
+  background-color: #ea4c3a;
+  color: white;
+  cursor: not-allowed;
+}
+
+.seat_label input[type="checkbox"]+label {
+  cursor: pointer;
+}
+
+.seat_label input[type="checkbox"]+label:hover {
+  background-color: rgb(53, 132, 146);
+}
+
+.seat_label input[type="checkbox"]:checked+label {
+  background-color: #ffc107;
+}
+
+
+//===================user tickets design=============================
+
+.user_tickets {
+  @import url('https://fonts.googleapis.com/css?family=Oswald');
+
+  * {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    box-sizing: border-box
+  }
+
+  .fl-left {
+    float: left
+  }
+
+  .fl-right {
+    float: right
+  }
+
+  .row,
+  article {
+    overflow: hidden;
+  }
+
+  .card {
+    display: table-row;
+    width: 100%;
+    background-color: #fff;
+    color: #989898;
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    position: relative;
+  }
+
+  .date {
+    display: table-cell;
+    width: 25%;
+    position: relative;
+    text-align: center;
+    border-right: 2px dashed #dadde6
+  }
+
+  .date:before,
+  .date:after {
+    content: "";
+    display: block;
+    width: 30px;
+    height: 30px;
+    background-color: #DADDE6;
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    z-index: 1;
+    border-radius: 50%
+  }
+
+  .date:after {
+    top: auto;
+    bottom: -15px;
+  }
+
+  .date time {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%)
+  }
+
+  .date time span {
+    display: block;
+  }
+
+  .date time span:first-child {
+    color: #2b2b2b;
+    font-weight: 600;
+    font-size: 250%
+  }
+
+  .date time span:nth-child(2) {
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .date time span:last-child {
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .card-cont {
+    display: table-cell;
+    width: 75%;
+    font-size: 85%;
+    padding: 10px 5px 30px 35px;
+  }
+
+  .card-cont small {
+    text-transform: none;
+
+  }
+
+  .card-cont .small {
+    color: #dc3545 !important;
+  }
+
+  .card-cont h3 {
+    color: #3C3C3C;
+    font-size: 130%;
+    margin-top: 2%;
+  }
+
+  .card-cont .even-date span {
+    display: block;
+    width: 100%;
+  }
+
+  .card-cont .even-date {
+    margin: 10px 5px 10px 10px;
+  }
+
+  .card-cont a {
+    display: block;
+    text-decoration: none;
+    width: 80px;
+    height: 30px;
+    background-color: #dc3545;
+    color: #fff;
+    text-align: center;
+    line-height: 30px;
+    border-radius: 2px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    transition: all ease 0.2s !important;
+  }
+
+  .card-cont a:active {
+    scale: 0.9 !important;
+  }
+}

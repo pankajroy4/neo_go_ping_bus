@@ -1,0 +1,108 @@
+<section>
+  <div class = "container py-4">
+    <div class = "row d-flex justify-content-center align-items-center h-100">
+      <div class = "col col-lg-8 mb-4 mb-lg-0">
+        <div class = "card mb-3 shadow" style = "border-radius: .5rem;">
+          <div class = "row g-0">
+            <div class="col-md-4 gradient-custom text-center profile"> 
+              <div class="upload" data-controller="profile">
+                <% if user.profile_pic.attached? %>
+                  <%= image_tag user.profile_pic, class: "mt-3 profile-pic rounded-circle", style: "width:200px; height: 200px;  object-fit: cover;", id: "img_tag", data: { profile_target: "img"} %>
+                <% else %>
+                  <%= image_tag "profile_logo.jpg", class: "mt-3 rounded-circle", style: "width:205px; height: 200px;  object-fit: cover;", id: "img_tag", data: { profile_target: "img"} %>
+                <% end %>
+
+	              <% if policy(user).update? %>
+                  <div class="rightRound rightEdit" id="edit" data-action="click->profile#edit" data-profile-target = "edit" data-profile-attached-value = "<%= user.profile_pic.attached? %>">
+                    <i class="fa-solid fa-pencil" title="Edit"></i>
+                  </div>
+                  
+                  <div class="rightRound rightUp" id="upload" style="display: none;" data-profile-target = "file">
+                    <label for="fileImg">
+                      <i class="fa-solid fa-upload" title="Change profile"></i>
+                    </label>
+                    <input type="file" name="fileImg" id="fileImg" style="display: none;" accept=".jpg, .jpeg, .png", data-action = "change->profile#fileChange" data-profile-target = "fileData"/>
+                  </div>
+
+                  <div class="leftRound" id="delete" style="display: none;" data-action="click->profile#delete" data-profile-target = "delete">
+                      <i class="fa-solid fa-trash" title="Delete"></i>
+                  </div>
+
+                  <div class="leftRound" id="cancel" style="display: none;" data-action="click->profile#cancel" data-profile-target = "cancel">
+                    <i class="fa fa-times" title="Cancel"></i>
+                  </div>
+
+                  <div class="leftRound midCancel" id="cancel2" style="display: none;" data-action="click->profile#cancel2" data-profile-target = "cancel2">
+                    <i class="fa fa-times" title="Cancel"></i>
+                  </div>
+
+                  <div class="rightRound rightConf" id="confirm" style="display: none;" data-action="click->profile#confirm" data-profile-target = "confirm" data-profile-id-value = "<%= user.id %>" >
+                    <i class="fa fa-check" title="Confirm"></i>
+                  </div>
+                <% end %>
+              </div>
+              <h5 class =  "mt-3"> <%= user.name %></h5>
+              <p><%= user.role.titleize %></p>
+              <% if policy(user).update? %>
+                <h6><%= link_to "My Bookings", bookings_path(user.id), class: "btn btn-outline-success" %></h6> 
+              <% end %>
+              <%= link_to "Back", :back, class: "btn btn-outline-danger mt-1 mb-2 py-1 px-3" %>
+            </div>
+            <div class="col-md-8">
+              <div class="card-body p-4">
+                <h6> Account Information</h6>
+                <hr class="mt-0 mb-2">
+                <div class="row pt-0">
+                  <div class="col-12 mb-0">
+                    <h6>Email:</h6>
+                    <p class="text-muted"><%= user.email %></p>
+                  </div>
+                </div>
+                <div class="row pt-0">
+                  <div class="col-8 mb-0">
+                    <h6>Created on:</h6>
+                    <p class="text-muted"><%= user.created_at.localtime.strftime("%d/%m/%Y , %r") %> <%= user.created_at.localtime.strftime(" %Z") %> </p>
+                  </div>
+                </div>
+                <% if user.bus_owner? %>
+                  <div class="row pt-0">
+                    <div class="col-10 mb-0">
+                      <h6>Registration no:</h6>
+                      <p class="text-muted"><%= user.registration_no %></p>
+                    </div>
+                  </div>    
+                <% end %>
+                <% if policy(user).update? %>
+                  <div class="row pt-1 ">
+                    <div class="col-8 mb-3">
+                      <h6><%= link_to "Update Account", edit_user_registration_path, class: "btn btn-outline-success mt-2" %> </h6> 
+                    </div>
+                  </div>
+                <% end %>
+                <% if current_user.admin? && user.admin? %>
+                  <div class = "row pt-1">
+                    <div class = "col-6 mb-3">
+                      <h6><%= link_to "Bus Owner List", bus_owners_path, class: "btn btn-outline-success mt-2" %></h6>
+                    </div>
+                  </div>
+                <% end %>
+                <div class="row pt-1">
+                  <% if current_user.bus_owner? %>
+                    <div class="col-6 mb-3">
+                      <h6><%= link_to "Add new Bus", new_bus_owner_bus_path(user), class: "btn btn-outline-success mt-2" %></h6>
+                    </div> 
+                  <% end %>
+                  <% if current_user.bus_owner? || (current_user.admin? && !user.admin?) %>
+                    <div class="col-6 mb-3">
+                      <h6><%= link_to "Listed Bus", bus_owner_buses_path(user), class: "btn btn-outline-success mt-2" %></h6>
+                    </div> 
+                  <% end %>
+                </div> 
+              </div> 
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

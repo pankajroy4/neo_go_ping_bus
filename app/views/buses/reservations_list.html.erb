@@ -1,0 +1,72 @@
+<div>
+	<div class = "container mt-5">
+		<div class = "row justify-content-center">
+			<div class = "col-md-6">
+				<div class = "card">
+					<div class = "card-body text-center">
+						<%= form_with(url: :get_resv_list, method: :get) do |f| %>
+							<h5 class = "card-title"><%= f.label :date, "Please select Date ", class: "date_label text-decoration-underline mb-1" %></h5>
+							<div id = "datepicker" class = "input-group date col-md-6" data-date-format = "mm-dd-yyyy">
+									<%= f.date_field :date, value: @date, class: "datepicker form-control text-center", required: "" %>
+							</div>
+							<%= f.hidden_field :bus_id, value: @bus.id %>
+							<%= f.submit "See reservations", class: "btn btn-outline-success  mt-1", data: { turbo_frame: "lists" } %>
+						<% end %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<%= turbo_frame_tag "lists" do %>
+		<% unless @reservations.empty? %>
+			<div class = "container mt-4  user_tickets" style = "">
+				<div class = "row flex justify-content-center m-1 mb-3" style = "border-radius: 10px; background: #dadde6;">
+					<div class = "card-header bg-black  text-center py-2 mb-3 xx" style = "color: #ff0000;">
+						<h5> Reservations for <%= @bus.name %> </h5>
+						<h6> <u style = "color: white;"> <%= @date.to_date.strftime("%d %B, %Y  %A") %> </u> </h6>
+					</div>
+					<% @reservations.each do |r| %>
+						<div class = "col-12 col-md-5 col-xl-3 col-xxl-3 justify-content-center m-1" style= "overflow:hidden; display: flex; padding: 0 !important;">
+							<article class="card m-1" style = "border: none;">
+								<section class="date">
+									<time datetime="23th feb">
+										<span> <%= r["s_n"] %></span><span>seat</span><span>#<%= r["r_id"] %></span>
+									</time>
+								</section>
+								<section class="card-cont" >
+									<small class = "small">NeoGo PingBus</small>
+									<h3><i class="fa-solid fa-user"></i> <%= r["u_name"] %></h3>
+									<div class="even-date">
+										<span>Seat ID: <%= r["r_id"] %> </span>
+										<span>Passenger ID: <%= r["u_id"] %></span>
+										<span>Passenger Name: <%= r["u_name"] %></span>
+									</div>
+								</section>
+							</article>
+						</div>
+					<% end %>
+				</div>
+			</div>
+		<% end %>
+	<% end %>
+	
+	<div class="container">
+    <div class="row">
+			<div class="col" data-controller="piechart" data-piechart-arr-value="<%= @arr.to_json %>">
+				<div class="row">
+					<div class="col m-1 p-2" style = "min-height: 275px; width: 90%; box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px; border-radius: 5px;" data-piechart-target="chart">
+						<% #= area_chart @arr %>
+					</div>
+					<div class="col m-1 p-2" style = "min-height: 275px; width: 90%; box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px; border-radius: 5px; " data-piechart-target="chart2">
+						<% #= line_chart @arr %>
+					</div>
+					<div class="col m-1 p-2" style = "min-height: 275px; width: 90%; box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.05) 0px 8px 32px; border-radius: 5px;" data-piechart-target="chart3">
+						<% #= column_chart @arr %>
+					</div>
+				</div>
+			</div>
+    </div>
+  </div>
+</div>
+

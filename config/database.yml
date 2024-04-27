@@ -1,0 +1,24 @@
+default: &default
+  adapter: postgresql
+  encoding: utf8
+  host: localhost
+  username: postgres
+  password: postgres
+  pool: 20
+
+development:
+  <<: *default
+  database: pingbus_development
+
+test:
+  <<: *default
+  database: pingbus_test
+
+production:
+  <<: *default
+  database: pingbus_production
+
+
+  # Dump file created as:
+  # pg_dump -U postgres -h localhost -W pingbus_development > pingbus_dump.sql
+  # pg_dump -U your_username -h localhost -W your_database_name > file_name.sql

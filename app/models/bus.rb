@@ -24,8 +24,8 @@ class Bus < ApplicationRecord
 # So, basically , here we got two method by using enum
   
   scope :search_by_name_or_route, ->(query) {
-          sanitized_string = sanitize_sql_like(query)
-          where("name LIKE ? OR route LIKE ?", "%#{sanitized_string}%", "%#{sanitized_string}%")
+        sanitized_string = sanitize_sql_like(query.downcase)
+        where("LOWER(name) LIKE ? OR LOWER(route) LIKE ?", "%#{sanitized_string}%", "%#{sanitized_string}%")
         }
 
   def disapprove!

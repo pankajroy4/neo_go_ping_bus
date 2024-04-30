@@ -44,5 +44,7 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => "/sidekiq"
   end
 
-  # match "*not_found", to: "homes#not_found", via: :all
+  match "*not_found", to: "homes#not_found", via: :all, constraints: lambda { |req|
+    req.path.exclude? 'rails/active_storage' # Exclude Active Storage paths
+  }
 end

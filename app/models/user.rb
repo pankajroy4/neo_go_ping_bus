@@ -42,8 +42,8 @@ class User < ApplicationRecord
   def send_reset_password_instructions
     token = set_reset_password_token
     # ResetPasswordInstructionsJob.set(wait: 1.seconds).perform_later(self, token) #when jon defined
-    Users::Mailer.reset_password_instructions(self, @token).deliver_later(wait: 1.seconds)
-    # Users::Mailer.reset_password_instructions(self, @token).deliver_now #for inline
+    Users::Mailer.reset_password_instructions(self, token).deliver_later(wait: 1.seconds)
+    # Users::Mailer.reset_password_instructions(self, token).deliver_now #for inline
     token
   end
 

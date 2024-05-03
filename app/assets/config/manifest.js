@@ -7,4 +7,3 @@
 //= link Chart.bundle.js
 
  //= link bootstrap.min.js
- //= link default_profile_icon.png

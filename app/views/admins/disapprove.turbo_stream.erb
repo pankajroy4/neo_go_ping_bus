@@ -3,7 +3,7 @@
 <% end %>
 
 <%= turbo_stream.update  "turbo_buttons_#{@bus.id}"  do%>
-  <%= link_to "Approve", approve_path(@busowner.id, @bus.id),  data: {turbo_frame: @bus}, data: {'turbo-method': :patch}, class: "btn btn-outline-success m-2" %>
+  <%= link_to "Approve", approve_path(@busowner.id, @bus.id), data: {'turbo-method': :patch}, class: "btn btn-outline-success m-2" %>
 <% end %>
 
 <%= turbo_stream.update "book_#{@bus.id}" , ""%>

@@ -29,7 +29,7 @@
 									<span>Arrival: 2:00 AM</span>
 									<span>Journey Date: <%= b["j_date"].to_date.strftime("%d %B, %Y  %A") %> </span>
 								</div>
-								<%= link_to "Cancel", bus_reservation_path(b["b_id"], b["r_id"]), class: "btn-outline-danger", data: { 'turbo-method': :delete, turbo_frame: "_top", controller: "alert", alert_target: "btn", action: "click->alert#confirmation", alert_text_value: "You are about to cancel the ticket.", alert_confirm_value: "Yes, cancel it!", alert_cancel_value: "No, keep it" } %> 
+								<%= link_to "Cancel", bus_reservation_path(b["b_id"], b["r_id"]), class: "btn-outline-danger", data: { 'turbo-method': :delete, controller: "alert", alert_target: "btn", action: "click->alert#confirmation", alert_text_value: "You are about to cancel the ticket.", alert_confirm_value: "Yes, cancel it!", alert_cancel_value: "No, keep it" } %> 
 							</section>
 						</article>
 					<% end %>

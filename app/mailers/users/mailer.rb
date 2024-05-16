@@ -19,7 +19,7 @@ class Users::Mailer < Devise::Mailer
     if @bus.main_image.attached?
       attachments.inline["#{@bus.name}.jpg"] = @bus.main_image.download
     else
-      attachments.inline["#{@bus.name}.jpg"] = File.read("app/assets/images/bus_logo2.png")
+      attachments.inline["#{@bus.name}.jpg"] = File.read("app/assets/images/bus_logo3.png")
     end
     mail to: @bus.user.email, subject: "Bus approval Email!!" if bus.user.bus_owner?
   end

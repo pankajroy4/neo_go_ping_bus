@@ -13,7 +13,7 @@
 					<div class = "card-body pt-0 mt-0">
 						<div class = "text-center">
 							<h4 class = "card-title">Bus name : <%= @bus.name %></h4>
-							<% if current_user&.admin? || current_user&.bus_owner? %>
+							<% if current_user&.admin? || (current_user&.bus_owner? && policy(@bus).view?)%>
 							<p class = "text-muted mb-2">Owner : <%= @busowner.name %></p>
 							<% end %>
 						</div>
@@ -27,7 +27,7 @@
 					<div class = "d-flex justify-content-between">
 						<span>Route:</span><span><%= @bus.route %></span>
 					</div>
-					<% if current_user&.admin? || current_user&.bus_owner? %>
+						<% if current_user&.admin? || (current_user&.bus_owner? && policy(@bus).view?)%>
 							<div class = "d-flex justify-content-between">
 								<span>Status:</span>
 								<%= turbo_frame_tag @bus do %>

@@ -4,9 +4,15 @@ class Users::SessionsController < Devise::SessionsController
     @remember_me = params[:remember_me]
     user = User.find_by(email: @email)
     if user
-      user.generate_and_send_otp
-      flash.now[:notice] = "OTP resended, check your mail!"
-      render turbo_stream: turbo_stream.update("flash", partial: "layouts/flash")
+      otp_age = Time.now - user.otp_sent_at
+      if otp_age < 1.minutes
+        flash.now[:alert] = "Retry after a minute!"
+        render turbo_stream: turbo_stream.update("flash", partial: "layouts/flash")
+      else
+        user.generate_and_send_otp
+        flash.now[:notice] = "OTP resended, check your mail!"
+        render turbo_stream: turbo_stream.update("flash", partial: "layouts/flash")
+      end
     else
       redirect_to root_path, alert: "Invalid email address."
     end

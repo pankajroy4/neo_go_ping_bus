@@ -139,7 +139,8 @@ export default class extends Controller {
   }
 
   insertLoader() {
-    this.flash.innerHTML = '<div id="loader"><i class="fas fa-spinner fa-spin"></i></div>';
+    // this.flash.innerHTML = '<div id="loader"><i class="fas fa-spinner fa-spin"></i></div>';
+    this.flash.innerHTML = '<div id="loader"><div class="loader"></div></div>';
   }
 
   handleSuccess(picUrl, message) {

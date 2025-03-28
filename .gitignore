@@ -34,3 +34,6 @@
 # Ignore master key for decrypting credentials and more.
 /config/master.key
 /config/credentials.sample.yml.enc
+/config/credentials/production.key
+
+/config/credentials/development.key

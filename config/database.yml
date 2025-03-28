@@ -16,7 +16,9 @@ test:
 
 production:
   <<: *default
+  username: pankajroy
   database: pingbus_production
+  password:  <%= Rails.application.credentials.dig(:database, :pg_password) %>
 
 
   # Dump file created as:

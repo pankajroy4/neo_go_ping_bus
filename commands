@@ -81,10 +81,15 @@ sudo systemctl restart nginx
 #Now its time to move the credetials files like master key etc to your server.
 
 # Commands to move credentials to virtual machines (Run this commands from yopur project root from local machine):
-# scp config/database.yml ubuntu@ec2-13-203-66-43.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/database.yml
+scp config/database.yml ubuntu@ec2-13-203-66-43.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/database.yml
+scp config/master.key ubuntu@ec2-13-203-66-43.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/master.key
+scp config/credentials.yml.enc ubuntu@ec2-13-203-66-43.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/credentials.yml.enc
+scp config/credentials/production.key ubuntu@ec2-13-203-66-43.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/credentials/production.key
 
-# scp config/master.key ubuntu@ec2-13-203-66-43.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/master.key
-# scp config/credentials.yml.enc ubuntu@ec2-13-203-66-43.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/credentials.yml.enc
+#New commands:
 
-# scp config/credentials/production.key ubuntu@ec2-13-203-66-43.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/credentials/production.key
-
+# Commands to move credentials to virtual machines (Run this commands from yopur project root from local machine):
+scp -i /home/user/.ssh/pankaj_deploy.pem  config/database.yml ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/database.yml
+scp -i /home/user/.ssh/pankaj_deploy.pem  config/master.key ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/master.key
+scp -i /home/user/.ssh/pankaj_deploy.pem  config/credentials.yml.enc ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/credentials.yml.enc
+scp -v -i /home/user/.ssh/pankaj_deploy.pem config/master.key ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/master.key

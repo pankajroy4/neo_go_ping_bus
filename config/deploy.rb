@@ -15,7 +15,7 @@ set :default_env, {
 }
 
 # append :linked_files, "config/database.yml", 'config/master.key' ,'config/credentials/production.key'
-append :linked_files, "config/database.yml", 'config/master.key' ,'config/credentials.yml.enc'
+append :linked_files, "config/database.yml", "config/master.key" ,"config/credentials.yml.enc"
 
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "vendor", "storage"
 

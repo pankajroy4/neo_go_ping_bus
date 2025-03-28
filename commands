@@ -1,0 +1,90 @@
+#Add required gem for capistrano.
+  #Note These are local level gems, so add them to your Gemfile in development group.
+    gem 'capistrano', require: false
+    gem 'capistrano-rails', require: false
+    gem 'capistrano-puma', require: false
+    gem 'capistrano-rvm', require: false
+    gem 'capistrano-bundler', require: false
+    gem 'capistrano-nodejs', require: false
+#Run bundle install
+#Run command to setup Capistrano configuration:  bundle exec cap install
+
+#Configure the file:
+  Capfile
+  config/deploy/production.rb
+  config/deploy.rb
+
+#Also change the port_number if want to tun on different port in puma.rb: config/puma.rb
+#Add DNS/Nameserver at domain provider.
+
+#Configure Nginx for Multiple Applications
+  #Connect to your Virtual machine.
+  #Create Nginx Config for neogopingbus.pankajroy.in
+
+  #Paste code like this:
+
+  server {
+      server_name neogopingbus.pankajroy.in;  # Your domain name here
+
+      root /home/ubuntu/apps/neogopingbus/current/public;  # Adjust to your app's public folder location
+
+      # Logging
+      access_log /var/log/nginx/neogopingbus_access.log;
+      error_log /var/log/nginx/neogopingbus_access.log;
+
+      # Proxy requests to Puma (on port 3001)
+      location / {
+          proxy_pass http://127.0.0.1:3001;  # Puma is running on port 3001
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+      }
+
+      # Optional: Additional security headers
+      add_header X-Content-Type-Options nosniff;
+      # add_header X-Frame-Options DENY;
+      add_header Content-Security-Policy "frame-ancestors 'self' https://neogopingbus.pankajroy.in";
+      add_header X-XSS-Protection "1; mode=block";
+
+
+      listen 443 ssl; # managed by Certbot
+      ssl_certificate /etc/letsencrypt/live/neogopingbus.pankajroy.in/fullchain.pem; # managed by Certbot
+      ssl_certificate_key /etc/letsencrypt/live/neogopingbus.pankajroy.in/privkey.pem; # managed by Certbot
+      include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+      ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+  }
+  server {
+      if ($host = neogopingbus.pankajroy.in) {
+          return 301 https://$host$request_uri;
+      } # managed by Certbot
+
+
+      server_name neogopingbus.pankajroy.in;
+      listen 80;
+      return 404; # managed by Certbot
+  }
+
+
+#Check if ssl certificate exist:
+sudo ls -l /etc/letsencrypt/live/neogopingbus.pankajroy.in/
+
+#If not reissue a new ssl uasing certboat:
+sudo certbot --nginx -d neogopingbus.pankajroy.in
+
+
+#Check for nxinx synatx:
+sudo nginx -t
+sudo systemctl restart nginx
+
+#Now its time to move the credetials files like master key etc to your server.
+
+# Commands to move credentials to virtual machines (Run this commands from yopur project root from local machine):
+# scp config/database.yml ubuntu@ec2-13-203-66-43.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/database.yml
+
+# scp config/master.key ubuntu@ec2-13-203-66-43.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/master.key
+# scp config/credentials.yml.enc ubuntu@ec2-13-203-66-43.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/credentials.yml.enc
+
+# scp config/credentials/production.key ubuntu@ec2-13-203-66-43.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/credentials/production.key
+

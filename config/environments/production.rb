@@ -61,7 +61,7 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
-  config.active_job.queue_adapter = :sidekiq
+  # config.active_job.queue_adapter = :sidekiq
   # config.active_job.queue_adapter = :inline
   # config.active_job.queue_name_prefix = "neogopingbus_production"
 
@@ -98,4 +98,22 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.active_job.queue_adapter = :inline
+  Rails.application.routes.default_url_options[:host] = "https://neogopingbus.pankajroy.in"
+
+  config.action_mailer.default_url_options = { host: "https://neogopingbus.pankajroy.in" }
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: "smtp.gmail.com",
+    port: 587,
+    domain: "neogopingbus.pankajroy.in",
+    user_name: Rails.application.credentials.smtp_username,
+    password: Rails.application.credentials.smtp_password,
+    authentication: "plain",
+    enable_starttls_auto: true,
+    open_timeout: 5,
+    read_timeout: 5,
+  }
 end

@@ -96,10 +96,16 @@ Rails.application.configure do
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 
+  config.logger = Logger.new(STDOUT)
+  config.log_level = :debug # or :info, :warn, :error, depending on what you need
+
+
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.active_job.queue_adapter = :inline
+  # config.active_job.queue_adapter = :inline
+  config.active_job.queue_adapter = :async
+
   Rails.application.routes.default_url_options[:host] = "https://neogopingbus.pankajroy.in"
 
   config.action_mailer.default_url_options = { host: "https://neogopingbus.pankajroy.in" }

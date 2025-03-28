@@ -11,3 +11,6 @@ window.Swal = Swal;
 // import Highcharts from "highcharts"
 // window.Highcharts = Highcharts
 // window.Chartkick = chartkick;
+
+import "jquery";
+import "sweetalert2";

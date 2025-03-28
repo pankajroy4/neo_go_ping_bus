@@ -14,8 +14,8 @@ module BusReservationSystem
     config.time_zone = "Asia/Kolkata"
     # config.assets.enabled = true 
 
-    # Rails.application.config.active_storage.queue = :inline
-    Rails.application.config.active_storage.queue = :sidekiq
+    Rails.application.config.active_storage.queue = :inline
+    # Rails.application.config.active_storage.queue = :sidekiq
 
     # Configuration for the application, engines, and railties goes here.
 

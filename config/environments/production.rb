@@ -96,7 +96,8 @@ Rails.application.configure do
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 
-  config.logger = Logger.new(STDOUT)
+  # config.logger = Logger.new(STDOUT)
+  config.logger = Logger.new(Rails.root.join('log', 'production.log'))
   config.log_level = :debug # or :info, :warn, :error, depending on what you need
 
 
@@ -104,7 +105,7 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # config.active_job.queue_adapter = :inline
-  config.active_job.queue_adapter = :async
+  config.active_job.queue_adapter = :inline
 
   Rails.application.routes.default_url_options[:host] = "https://neogopingbus.pankajroy.in"
 

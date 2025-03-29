@@ -19,7 +19,7 @@ append :linked_files, "config/database.yml", "config/master.key" ,"config/creden
 
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/system", "vendor", "storage"
 
-set :keep_releases, 2
+set :keep_releases, 1
 
 set :ssh_options, {
   keys: %w(/Users/pankajroy/.ssh/pankaj_deploy.pem),

@@ -35,28 +35,28 @@ class User < ApplicationRecord
     otp = generate_otp
     self.save!
     # ConfirmationInstructionsJob.set(wait: 1.seconds).perform_later(self, confirmation_token, otp) #when job defined
-    Users::Mailer.confirmation_instructions(self, confirmation_token, otp).deliver_later(wait: 1.seconds)
-    # Users::Mailer.confirmation_instructions(self, confirmation_token, otp).deliver_now #for inline
+    # Users::Mailer.confirmation_instructions(self, confirmation_token, otp).deliver_later(wait: 1.seconds)
+    Users::Mailer.confirmation_instructions(self, confirmation_token, otp).deliver_now #for inline
   end
 
   def send_reset_password_instructions
     token = set_reset_password_token
     # ResetPasswordInstructionsJob.set(wait: 1.seconds).perform_later(self, token) #when jon defined
-    Users::Mailer.reset_password_instructions(self, token).deliver_later(wait: 1.seconds)
-    # Users::Mailer.reset_password_instructions(self, token).deliver_now #for inline
+    # Users::Mailer.reset_password_instructions(self, token).deliver_later(wait: 1.seconds)
+    Users::Mailer.reset_password_instructions(self, token).deliver_now #for inline
     token
   end
 
   def send_devise_notification(notification, *args)
     # PasswordChangeJob.set(wait: 1.seconds).perform_later(self) #when jon defined
-    Users::Mailer.password_change(self).deliver_later(wait: 1.seconds)
-    # Users::Mailer.password_change(self).deliver_now #for inline
+    # Users::Mailer.password_change(self).deliver_later(wait: 1.seconds)
+    Users::Mailer.password_change(self).deliver_now #for inline
   end
 
   def send_email_changed_notification
     # EmailChangedJob.set(wait: 1.seconds).perform_later(self) #whenjob defined 
-    Users::Mailer.email_changed(self).deliver_later(wait: 1.seconds)
-    # Users::Mailer.email_changed(self).deliver_now #for inline
+    # Users::Mailer.email_changed(self).deliver_later(wait: 1.seconds)
+    Users::Mailer.email_changed(self).deliver_now #for inline
   end
 
   # def send_unlock_instructions
@@ -73,7 +73,7 @@ class User < ApplicationRecord
     self.save!
     puts "========================  #{otp}  ========================="
     # OtpVerificationJob.set(wait: 1.seconds).perform_later(self, otp) #when jon defined
-    Users::Mailer.otp_verification(self, otp).deliver_later(wait: 2.seconds)
-    # Users::Mailer.otp_verification(self, otp).deliver_now # for inline
+    # Users::Mailer.otp_verification(self, otp).deliver_later(wait: 2.seconds)
+    Users::Mailer.otp_verification(self, otp).deliver_now # for inline
   end
 end

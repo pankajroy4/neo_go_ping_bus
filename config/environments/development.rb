@@ -47,15 +47,15 @@ Rails.application.configure do
 
   # config.asset_host = "http://192.168.1.5:3000"
   
-  # config.action_mailer.default_url_options = { host: "192.168.1.51", port: "3000" }
-  # Rails.application.routes.default_url_options = { host: "192.168.1.51", port: "3000" }
+  config.action_mailer.default_url_options = { host: "192.168.1.51", port: "3000" }
+  Rails.application.routes.default_url_options = { host: "192.168.1.51", port: "3000" }
   # config.asset_host = "http://192.168.1.51:3000"
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  # config.active_job.queue_adapter = :inline  
-  config.active_job.queue_adapter = :sidekiq
+  config.active_job.queue_adapter = :inline  
+  # config.active_job.queue_adapter = :sidekiq
 
   # Raise exceptions for disallowed deprecations.
   config.active_support.disallowed_deprecation = :raise
@@ -82,17 +82,17 @@ Rails.application.configure do
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
   
-  # config.action_mailer.delivery_method = :letter_opener
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address: "smtp.gmail.com",
-    port: 587,
-    domain: "gmail.com",
-    user_name: Rails.application.credentials.smtp_username,
-    password: Rails.application.credentials.smtp_password,
-    authentication: "plain",
-    enable_starttls_auto: true,
-    open_timeout: 5,
-    read_timeout: 5,
-  }
+  config.action_mailer.delivery_method = :letter_opener
+  # config.action_mailer.delivery_method = :smtp
+  # config.action_mailer.smtp_settings = {
+  #   address: "smtp.gmail.com",
+  #   port: 587,
+  #   domain: "gmail.com",
+  #   user_name: Rails.application.credentials.smtp_username,
+  #   password: Rails.application.credentials.smtp_password,
+  #   authentication: "plain",
+  #   enable_starttls_auto: true,
+  #   open_timeout: 5,
+  #   read_timeout: 5,
+  # }
 end

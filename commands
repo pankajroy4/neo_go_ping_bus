@@ -133,7 +133,13 @@ RAILS_ENV=production bundle exec rails assets:precompile
 RAILS_ENV=production bundle exec rails db:seed
 RAILS_ENV=production bundle exec rails server &
 cat tmp/pids/server.pid
+sudo nano app/assets/config/manifest.js
+ tail -f log/production.log
+ ls -l public/assets
 
+
+bundle exec puma -C config/puma.rb -d
+bundle exec puma -C config/puma.rb -d
 
 
 
@@ -141,16 +147,21 @@ restart puma
 
  nohup bash -c 'source /home/ubuntu/.rvm/scripts/rvm && RAILS_ENV=production bundle exec puma -C config/puma.rb -b tcp://127.0.0.1:3001' > log/puma.log 2>&1 &
 
+nohup bash -c 'source /home/ubuntu/.rvm/scripts/rvm && rvm use ruby-3.2.2@myapp && RAILS_ENV=production bundle exec puma -C config/puma.rb -b tcp://127.0.0.1:3001 -d' > log/puma.log 2>&1 &
+
+RAILS_ENV=production bundle exec puma -C config/puma.rb &
+pkill -f puma
+
 
 create  niinx file:
  sudo ln -s /etc/nginx/sites-available/neogopingbus /etc/nginx/sites-enabled/
 
-
-
-
- sudo nano /etc/nginx/sites-available/default
+sudo nano /etc/nginx/sites-available/default
+# may need to delete above defalt file
 
 
 #  list FIle
 ls -l /etc/nginx/sites-enabled/
+
+
 

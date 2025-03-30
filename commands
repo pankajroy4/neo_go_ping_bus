@@ -1,5 +1,30 @@
+#Command to SSH to your console:
+ #NOTE: If your SSH config is already set up with the key, or if you're using AWS EC2 default keys, use 1st command.
+    # For using 1st command:
+      # Move .pem file to .ssh folder 
+      # Run following commands:
+      eval "$(ssh-agent -s)"
+      ssh-add ~/.ssh/pankaj_deploy.pem
+    # Now You can use below command
+    ssh ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com
+    # OR #If you explicitly need to use a specific SSH key, use second commands
+    ssh -i "/Users/pankajroy/.ssh/pankaj_deploy.pem" ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com 
+#  There is one more way. We can also configure the .ssh config file:
+#    Edit or create the file:
+    nano ~/.ssh/config
+  # Add/Edit the host like this:
+    Host pankajroyaws
+      HostName ec2-13-233-151-117.ap-south-1.compute.amazonaws.com
+      User ubuntu #tells SSH which default username to use when connecting. In AWS EC2 instances running Ubuntu, the default user is ubuntu
+      IdentityFile ~/.ssh/pankaj_deploy.pem
+  # Save and exit.
+  # Now you can SSH using a short command:
+   ssh pankajroyaws
+
+# =======================================================================================================
+
 #Add required gem for capistrano.
-  #Note These are local level gems, so add them to your Gemfile in development group.
+  #Note These are local level gems, so add them to your Gemfile in development group (Local machine)
     gem 'capistrano', require: false
     gem 'capistrano-rails', require: false
     gem 'capistrano-puma', require: false
@@ -14,12 +39,24 @@
   config/deploy/production.rb
   config/deploy.rb
 
-#Also change the port_number if want to tun on different port in puma.rb: config/puma.rb
-#Add DNS/Nameserver at domain provider.
+#Also change the port_number if want to run on different port in puma.rb: config/puma.rb
+#Add DNS/Nameserver at domain provider(Hostinger/Make it point to your server ).
+
+#Note: must configure the file: config/environments/production.rb before deployment
+  # For below process, 1st install nginx on your VM(If not already installed)
+  # SSH to your VM, and run following commands:
+  sudo apt install nginx -y
+  sudo systemctl status nginx
+  sudo systemctl start nginx
+  sudo systemctl enable nginx
+  sudo systemctl reload nginx
+  sudo systemctl restart nginx
+
 
 #Configure Nginx for Multiple Applications
   #Connect to your Virtual machine.
-  #Create Nginx Config for neogopingbus.pankajroy.in
+  #Create Nginx Config for neogopingbus.pankajroy.in if not have yet.
+  # You can check by: ls -l /etc/nginx/sites-enabled/ 
   /etc/nginx/sites-available/neogopingbus
 
   #Paste code like this:
@@ -31,7 +68,7 @@
 
       # Logging
       access_log /var/log/nginx/neogopingbus_access.log;
-      error_log /var/log/nginx/neogopingbus_access.log;
+      error_log /var/log/nginx/neogopingbus_error.log;
 
       # Proxy requests to Puma (on port 3001)
       location / {
@@ -61,107 +98,130 @@
           return 301 https://$host$request_uri;
       } # managed by Certbot
 
-
       server_name neogopingbus.pankajroy.in;
       listen 80;
       return 404; # managed by Certbot
   }
 
+# ==============================================================================
+
+#Note for below process, first iinstall certbot on your server i.e VM if not installed.
+#SSh to your console and run the following commands:
+sudo apt install certbot python3-certbot-nginx -y
 
 #Check if ssl certificate exist:
 sudo ls -l /etc/letsencrypt/live/neogopingbus.pankajroy.in/
-
 #If not reissue a new ssl uasing certboat:
-sudo certbot --nginx -d neogopingbus.pankajroy.in
+sudo certbot --nginx -d neogopingbus.pankajroy.in  #This will automatically configure SSL for Nginx.
 
+#Command to list active nginx file for different 
+ls -l /etc/nginx/sites-enabled/ 
+# These file tells Nginx how to handle incoming requests for your application, including:
+#   Which domain or IP to listen on.
+#   Where the application files are located.
+#   Whether to proxy requests to a backend (e.g., Puma, Passenger).
+#   SSL settings, logging, and other configurations.
 
-#Check for nxinx synatx:
+#Check for nginx synatx:
 sudo nginx -t
 sudo systemctl restart nginx
 
+#Sometimes when nginx force request to use default proxy, we may need to empty the default configuration.
+#First ssh to your VM, and:
+#Open this file and clear it, then press :Ctrl+o, then hit enter, the press ctrl+x
+ sudo nano /etc/nginx/sites-available/default
+
+# =======================================================================================
 #Now its time to move the credetials files like master key etc to your server.
+  #Both commands use scp (Secure Copy Protocol) to transfer file to a remote server
+  #Commands to move credentials to virtual machines (Run this commands from yopur project root from local machine).
 
-# Commands to move credentials to virtual machines (Run this commands from yopur project root from local machine):
-scp config/database.yml ubuntu@ec2-13-203-66-43.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/database.yml
-scp config/master.key ubuntu@ec2-13-203-66-43.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/master.key
-scp config/credentials.yml.enc ubuntu@ec2-13-203-66-43.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/credentials.yml.enc
-scp config/credentials/production.key ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/credentials/production.key
+  #If your SSH config is already set up with the key, or if you're using AWS EC2 default keys,
+  #or If the EC2 instance has a dynamic public IP (which changes on restart), then use 1st command.
+  #If you explicitly need to use a specific SSH key, then use 2nd command
 
-#New commands:
+  #Note: To use 1st commands:
+  # .pem file must be in .ssh folder, Run following commands first.
+  # chmod 600 ~/.ssh/pankaj_deploy.pem    => set proper permission
+  # eval "$(ssh-agent -s)"  => start the agent
+  # ssh-add ~/.ssh/pankaj_deploy.pem => Add key to ssh agent 
 
-# Commands to move credentials to virtual machines (Run this commands from yopur project root from local machine):
-scp -i /home/user/.ssh/pankaj_deploy.pem  config/database.yml ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/database.yml
-scp -i /home/user/.ssh/pankaj_deploy.pem  config/master.key ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/master.key
-scp -i /home/user/.ssh/pankaj_deploy.pem  config/credentials.yml.enc ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/credentials.yml.enc
+ #Scp the database.yml:
+  scp config/database.yml ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/database.yml
+  #If you explicitly need to use a specific SSH key
+  scp -i /Users/pankajroy/.ssh/pankaj_deploy.pem  config/database.yml ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/database.yml
+  #OR if have added host in ssh config file like this:
+    #  Host pankajroyaws
+    #   HostName ec2-13-233-151-117.ap-south-1.compute.amazonaws.com
+    #   User ubuntu
+    #   IdentityFile ~/.ssh/pankaj_deploy.pem
+  scp config/database.yml pankajroyaws:/home/ubuntu/apps/neogopingbus/shared/config/database.yml
 
-scp -i /Users/pankajroy/.ssh/pankaj_deploy.pem  config/credentials/production.key ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/credentials/production.key
+#SCP the Master Key 
+  scp config/master.key ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/master.key
+  #OR
+  scp -i /Users/pankajroy/.ssh/pankaj_deploy.pem config/master.key ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/master.key
 
-scp -v -i /home/user/.ssh/pankaj_deploy.pem config/master.key ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/master.key
+#SCP the production key
+  scp config/credentials/production.key ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/credentials/production.key
+  #OR
+  scp -i /Users/pankajroy/.ssh/pankaj_deploy.pem config/credentials/production.key ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/credentials/production.key
 
+#SCP the credential key, However not needed.
+  scp config/credentials.yml.enc ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/credentials.yml.enc
+  #OR
+  scp -i /Users/pankajroy/.ssh/pankaj_deploy.pem config/credentials.yml.enc ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/credentials.yml.enc
 
-scp -i /Users/pankajroy/.ssh/pankaj_deploy.pem config/credentials/production.key ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/credentials/production.key
+# =======================================================================================================
+# Command to deploy the app
+# Goto root location of your app in local machine and run below commands:
+  cap production deploy
+# =========================================================================================================
 
-
-scp -i /Users/pankajroy/.ssh/pankaj_deploy.pem  config/credentials/production.yml.enc ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/credentials/production.yml.enc
-
-
-scp -i /Users/pankajroy/.ssh/pankaj_deploy.pem config/master.key ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/master.key
-
-scp -i /Users/pankajroy/.ssh/pankaj_deploy.pem config/credentials.yml.enc ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/credentials.yml.enc
-
-scp -i /Users/pankajroy/.ssh/pankaj_deploy.pem config/credentials/production.key ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/credentials/production.key
-
-
-scp -i /Users/pankajroy/.ssh/pankaj_deploy.pem  config/database.yml ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/database.yml
-
-//= link_tree ../images
-//= link_directory ../stylesheets .css
-//= link_tree ../../javascript .js
-//= link_tree ../../../vendor/javascript .js
-//= link popper.js
-//= link chartkick.js
-//= link Chart.bundle.js
-
- //= link bootstrap.min.js
-
-
-
+#SSH to VM and the run this to go to your current deployed apps
  cd ..
  cd ubuntu/apps/neogopingbus/current
+#Or directly 
+ cd ~/apps/neogopingbus/current
 
-RAILS_ENV=production bundle exec rails assets:precompile
-RAILS_ENV=production bundle exec rails db:seed
-RAILS_ENV=production bundle exec rails server &
-cat tmp/pids/server.pid
-sudo nano app/assets/config/manifest.js
- tail -f log/production.log
- ls -l public/assets
+#Commands to compile, clobber, seed, server, pid, kill, log 
+  RAILS_ENV=production bundle exec rails assets:clobber
+  RAILS_ENV=production bundle exec rails assets:precompile
+  RAILS_ENV=production bundle exec rails db:seed
+  RAILS_ENV=production bundle exec rails server &
+  cat tmp/pids/server.pid
+  kill -9 12458
+  tail -f log/production.log
+
+  #List content of a folder
+  ls -l public/assets
 
 
-bundle exec puma -C config/puma.rb -d
-bundle exec puma -C config/puma.rb -d
-
-
-
-restart puma
-
+#If need to start puma manually in background (MOSTLY NOT NEEDED)
  nohup bash -c 'source /home/ubuntu/.rvm/scripts/rvm && RAILS_ENV=production bundle exec puma -C config/puma.rb -b tcp://127.0.0.1:3001' > log/puma.log 2>&1 &
+#Kill puma
+ pkill -f puma
+# ============================================================================================================
 
-nohup bash -c 'source /home/ubuntu/.rvm/scripts/rvm && rvm use ruby-3.2.2@myapp && RAILS_ENV=production bundle exec puma -C config/puma.rb -b tcp://127.0.0.1:3001 -d' > log/puma.log 2>&1 &
+#Some Useful commands to run on vm
+  #To see the content of a file on server:
+  #-> SSH to your server and go to current folder
+    cd ..
+    cd ubuntu/apps/neogopingbus/current
+    # Directly goto current folder
+    cd ~/apps/neogopingbus/current
+  # Now if you want to see/edit the content of a file
+    # sudo nano file_path
+  example: sudo nano app/models/user.rb
+  #  After edit press,ctrl+o, enter, ctrl+x
 
-RAILS_ENV=production bundle exec puma -C config/puma.rb &
-pkill -f puma
-
-
-create  niinx file:
- sudo ln -s /etc/nginx/sites-available/neogopingbus /etc/nginx/sites-enabled/
-
-sudo nano /etc/nginx/sites-available/default
-# may need to delete above defalt file
-
-
-#  list FIle
-ls -l /etc/nginx/sites-enabled/
-
-
-
+#To make a directory:
+mkdir -p /home/ubuntu/apps/neogopingbus/shared/config/credentials
+#To see memory uses:
+free -h
+#TO remove folder
+sudo rm -f /var/lib/dpkg/lock
+#To remove file
+rm file_path
+#List files inside a folder:
+ls -l ~/apps/portfolio/current/bin

@@ -71,9 +71,6 @@ class User < ApplicationRecord
   def generate_and_send_otp
     otp = generate_otp
     self.save!
-    puts "========================  #{otp}  ========================="
-    # OtpVerificationJob.set(wait: 1.seconds).perform_later(self, otp) #when jon defined
-    # Users::Mailer.otp_verification(self, otp).deliver_later(wait: 2.seconds)
     Users::Mailer.otp_verification(self, otp).deliver_now # for inline
   end
 end

@@ -1,0 +1,153 @@
+# SSH Access Instructions
+## 1. Connecting to Your EC2 Instance via SSH
+### Option 1: Using Default SSH Config (Recommended)
+1. Move .pem file to ~/.ssh folder
+2. Run the following commands:
+     eval "$(ssh-agent -s)"
+      ssh-add ~/.ssh/pankaj_deploy.pem 
+
+3. Connect to the server:
+   ssh ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com
+
+### Option 2: Using an Explicit SSH Key
+ssh -i "~/.ssh/pankaj_deploy.pem" ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com
+
+### Option 3: Configuring SSH for a Shorter Command
+1. Edit/create ~/.ssh/config:
+   nano ~/.ssh/config
+2. Add the following:
+   Host pankajroyaws
+       HostName ec2-13-233-151-117.ap-south-1.compute.amazonaws.com
+       User ubuntu
+       IdentityFile ~/.ssh/pankaj_deploy.pem
+3. Save and exit, then use:
+   ssh pankajroyaws
+
+# Capistrano Setup
+# ============================================================================================
+
+## 1. Install Required Gems
+Add the following to your `Gemfile` under the `development` group:
+gem 'capistrano', require: false
+gem 'capistrano-rails', require: false
+gem 'capistrano-puma', require: false
+gem 'capistrano-rvm', require: false
+gem 'capistrano-bundler', require: false
+gem 'capistrano-nodejs', require: false
+Run:
+bundle install
+bundle exec cap install
+
+## 2. Configure Capistrano
+Edit the following files:
+- `Capfile`
+- `config/deploy/production.rb`
+- `config/deploy.rb`
+
+## 3. Adjust Puma Port (Optional)
+Modify `config/puma.rb` if needed.
+
+
+
+# Nginx Setup
+# ============================================================================================
+
+## 1. Install and Start Nginx if not installed on your server i.e VM
+sudo apt install nginx -y
+sudo systemctl enable --now nginx
+
+## 2. Configure Nginx for Your Application
+1. Check if the config exists:
+   ls -l /etc/nginx/sites-enabled/
+
+2. Create the config if needed:
+   sudo nano /etc/nginx/sites-available/neogopingbus
+
+3. Add:
+   server {
+       server_name neogopingbus.pankajroy.in;
+       root /home/ubuntu/apps/neogopingbus/current/public;
+       access_log /var/log/nginx/neogopingbus_access.log;
+       error_log /var/log/nginx/neogopingbus_error.log;
+       location / {
+           proxy_pass http://127.0.0.1:3001;
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           proxy_set_header X-Forwarded-Proto $scheme;
+       }
+       listen 443 ssl;
+       ssl_certificate /etc/letsencrypt/live/neogopingbus.pankajroy.in/fullchain.pem;
+       ssl_certificate_key /etc/letsencrypt/live/neogopingbus.pankajroy.in/privkey.pem;
+   }
+   server {
+       listen 80;
+       server_name neogopingbus.pankajroy.in;
+       return 301 https://$host$request_uri;
+   }
+
+4. Enable and restart Nginx:
+   sudo ln -s /etc/nginx/sites-available/neogopingbus /etc/nginx/sites-enabled/
+   sudo nginx -t
+   sudo systemctl restart nginx
+
+
+# SSL Configuration
+# ============================================================================================
+
+## 1. Install Certbot if not installed at your VM
+sudo apt install certbot python3-certbot-nginx -y
+
+## 2. Issue SSL Certificate
+sudo certbot --nginx -d neogopingbus.pankajroy.in
+
+## 3. Verify SSL Certificate
+sudo ls -l /etc/letsencrypt/live/neogopingbus.pankajroy.in/
+
+# Transferring Credentials to Server
+# ============================================================================================
+
+## 1. Securely Copy Files (SCP)
+scp config/database.yml ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/
+scp config/master.key ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/
+scp config/credentials/production.key ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/credentials/
+scp config/credentials.yml.enc ubuntu@ec2-13-233-151-117.ap-south-1.compute.amazonaws.com:/home/ubuntu/apps/neogopingbus/shared/config/
+
+# If using an explicit SSH key:
+scp -i ~/.ssh/pankaj_deploy.pem config/database.yml ubuntu@13.233.151.117:/home/ubuntu/apps/neogopingbus/shared/config/
+
+# ============================================================================================
+# Deployment Commands
+
+## 1. Deploy Application
+cap production deploy
+
+## 2. Access Deployed Application
+cd ~/apps/neogopingbus/current
+
+# ============================================================================================
+# Useful Commands
+
+## 1. Rails Commands
+
+RAILS_ENV=production bundle exec rails assets:clobber
+RAILS_ENV=production bundle exec rails assets:precompile
+RAILS_ENV=production bundle exec rails db:seed
+RAILS_ENV=production bundle exec rails server &
+cat tmp/pids/server.pid
+kill -9 <PID>
+tail -f log/production.log
+
+## 2. Puma Commands (If Needed)
+nohup bash -c 'source /home/ubuntu/.rvm/scripts/rvm && RAILS_ENV=production bundle exec puma -C config/puma.rb -b tcp://127.0.0.1:3001' > log/puma.log 2>&1 &
+pkill -f puma
+
+
+# Final Notes
+- Always check `nginx` syntax before restarting:
+  sudo nginx -t
+  sudo systemctl restart nginx
+
+- To edit files on the server:
+  sudo nano <file_path>
+

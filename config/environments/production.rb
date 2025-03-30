@@ -62,13 +62,8 @@ Rails.application.configure do
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_adapter = :sidekiq
-  # config.active_job.queue_adapter = :inline
+  config.active_job.queue_adapter = :inline
   # config.active_job.queue_name_prefix = "neogopingbus_production"
-
-  # Rails.application.routes.default_url_options[:host] = "neogopingbus.onrender.com"
-
-  # config.action_mailer.default_url_options = { host: "192.168.1.5", port: "3000" }
-  # Rails.application.routes.default_url_options = { host: "192.168.1.5", port: "3000" }
 
   config.action_mailer.perform_caching = false
 
@@ -98,15 +93,10 @@ Rails.application.configure do
 
   # config.logger = Logger.new(STDOUT)
   config.logger = Logger.new(Rails.root.join('log', 'production.log'))
-  config.log_level = :debug # or :info, :warn, :error, depending on what you need
-
+  config.log_level = :info # or :info, :warn, :error, depending on what you need
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  # config.active_job.queue_adapter = :inline
-  config.active_job.queue_adapter = :inline
-
   Rails.application.routes.default_url_options[:host] = "https://neogopingbus.pankajroy.in"
 
   config.action_mailer.default_url_options = { host: "https://neogopingbus.pankajroy.in" }

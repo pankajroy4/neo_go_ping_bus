@@ -79,8 +79,8 @@ class Bus < ApplicationRecord
 
   def send_approval_email
     # BusApprovalJob.set(wait: 1.seconds).perform_later(self) #when job defined
-    Users::Mailer.bus_approval(self).deliver_later(wait: 1.seconds) 
-    # Users::Mailer.bus_approval(self).deliver_now #for inline  
+    # Users::Mailer.bus_approval(self).deliver_later(wait: 1.seconds) 
+    Users::Mailer.bus_approval(self).deliver_now #for inline  
   end
 end
 

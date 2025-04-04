@@ -24,13 +24,28 @@
 									<% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
 										<div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
 									<% end %>
-									<%= f.password_field :password, placeholder: "Password", class: "form-control form-control-mg mb-2", autocomplete: "new-password" %>
+									<div class="password-container form-outline mb-2">
+										<div class="password-wrapper" data-controller="toggle-password">
+											<%= f.password_field :password, placeholder: "Password", class: "input-field form-control form-control-mg mb-2", autocomplete: "new-password", id: "password-field", data: { toggle_password_target: "password" } %>
+											<i class="fas fa-eye toggle-password-icon" data-action="click->toggle-password#toggle" data-toggle-password-target="icon"></i>
+										</div>
+									</div>
 									<% if @minimum_password_length %>
 										<em>(<%= @minimum_password_length %> characters minimum)</em><br>
 									<% end %>
-									<%= f.password_field :password_confirmation, placeholder: "Confirm password", class: "form-control form-control-mg mb-2", autocomplete: "new-password" %>
+									<div class="password-container form-outline mb-2">
+										<div class="password-wrapper" data-controller="toggle-password">
+											<%= f.password_field :password_confirmation, placeholder: "Confirm password", class: "input-field form-control form-control-mg mb-2", autocomplete: "new-password", id: "password-field", data: { toggle_password_target: "password" } %>
+											<i class="fas fa-eye toggle-password-icon" data-action="click->toggle-password#toggle" data-toggle-password-target="icon"></i>
+										</div>
+									</div>
 									<i>(we need your current password to confirm your changes)</i><br>
-									<%= f.password_field :current_password, autocomplete: "password", class: "form-control form-control-mg mb-2", placeholder: "current password", autofocus: true %>
+									<div class="password-container form-outline mb-2">
+										<div class="password-wrapper" data-controller="toggle-password">
+											<%= f.password_field :current_password, autocomplete: "password", class: "input-field form-control form-control-mg mb-2",  placeholder: "Current password", autofocus: true, id: "password-field", data: { toggle_password_target: "password" } %>
+											<i class="fas fa-eye toggle-password-icon" data-action="click->toggle-password#toggle" data-toggle-password-target="icon"></i>
+										</div>
+									</div>
 									<% if resource.bus_owner? %>
 										<%= f.text_field :registration_no, placeholder: "Registration no", required: "", class: "form-control form-control-mg mb-2" %>
 									<% end %>  

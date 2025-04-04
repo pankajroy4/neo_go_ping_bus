@@ -512,3 +512,27 @@ body::-webkit-scrollbar-thumb {
     scale: 0.9 !important;
   }
 }
+
+// ========================== Toggle password ==========================
+
+.password-wrapper {
+  position: relative;
+}
+
+.toggle-password-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #000000;
+  font-size: 1rem;
+}
+
+input:-webkit-autofill {
+  background-color: transparent !important;
+  -webkit-box-shadow: 0 0 0 1000px rgba(255, 255, 255, 0) inset !important;
+  // -webkit-text-fill-color: #ffffff !important;
+  transition: background-color 9999s ease-in-out 0s;
+  // caret-color: #fff !important;
+}

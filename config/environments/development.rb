@@ -42,15 +42,10 @@ Rails.application.configure do
   config.action_mailer.perform_caching = false
 
 
-  config.action_mailer.default_url_options = { host: "192.168.1.11", port: "3000" }
-  Rails.application.routes.default_url_options = { host: "192.168.1.11", port: "3000" }
+  config.action_mailer.default_url_options = { host: "localhost", port: "3000" }
+  Rails.application.routes.default_url_options = { host: "localhost", port: "3000" }
 
   # config.asset_host = "http://192.168.1.5:3000"
-  
-  config.action_mailer.default_url_options = { host: "192.168.1.51", port: "3000" }
-  Rails.application.routes.default_url_options = { host: "192.168.1.51", port: "3000" }
-  # config.asset_host = "http://192.168.1.51:3000"
-
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 

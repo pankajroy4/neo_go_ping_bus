@@ -24,3 +24,6 @@ application.register("removals", RemovalsController)
 
 import TimerController from "./timer_controller"
 application.register("timer", TimerController)
+
+import togglePasswordController from "./toggle_password_controller";
+application.register("toggle-password", togglePasswordController);

@@ -6,7 +6,7 @@
 			<div class="col-xl-8">
 				<div class="card shadow" style="border-radius: 1rem;">
 					<div class="row g-0 pb-3">
-						<div class="col-md-6 col-lg-5 text-center">
+						<div class="col-md-6 col-lg-5 d-none d-md-block text-center">
 							<%= image_tag "update.png", class: "img-fluid", style: "border-radius: 10px; filter: drop-shadow(10px 7px 12px #e65646);" %>
 							<%= link_to "Delete Account", registration_path(resource_name), data: {controller: "alert", alert_target: "btn",action:"click->alert#confirmation", alert_text_value: "Your account will be deleted permanently", alert_confirm_value: "Yes, Delete!", alert_cancel_value: "No, keep it!" }, class: "btn btn-outline-danger btn-mg mt-2" %>
 						</div>
@@ -26,20 +26,17 @@
 									<% end %>
 									<div class="password-container form-outline mb-2">
 										<div class="password-wrapper" data-controller="toggle-password">
-											<%= f.password_field :password, placeholder: "Password", class: "input-field form-control form-control-mg mb-2", autocomplete: "new-password", id: "password-field", data: { toggle_password_target: "password" } %>
+											<%= f.password_field :password, placeholder: "Password (#{@minimum_password_length} characters minimum)", class: "input-field form-control form-control-mg mb-2", autocomplete: "new-password", id: "password-field", data: { toggle_password_target: "password" } %>
 											<i class="fas fa-eye toggle-password-icon" data-action="click->toggle-password#toggle" data-toggle-password-target="icon"></i>
 										</div>
 									</div>
-									<% if @minimum_password_length %>
-										<em>(<%= @minimum_password_length %> characters minimum)</em><br>
-									<% end %>
 									<div class="password-container form-outline mb-2">
 										<div class="password-wrapper" data-controller="toggle-password">
 											<%= f.password_field :password_confirmation, placeholder: "Confirm password", class: "input-field form-control form-control-mg mb-2", autocomplete: "new-password", id: "password-field", data: { toggle_password_target: "password" } %>
 											<i class="fas fa-eye toggle-password-icon" data-action="click->toggle-password#toggle" data-toggle-password-target="icon"></i>
 										</div>
 									</div>
-									<i>(we need your current password to confirm your changes)</i><br>
+									<i>*we need your current password to confirm your changes</i><br>
 									<div class="password-container form-outline mb-2">
 										<div class="password-wrapper" data-controller="toggle-password">
 											<%= f.password_field :current_password, autocomplete: "password", class: "input-field form-control form-control-mg mb-2",  placeholder: "Current password", autofocus: true, id: "password-field", data: { toggle_password_target: "password" } %>

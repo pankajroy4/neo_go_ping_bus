@@ -21,6 +21,7 @@
 
 <%= turbo_frame_tag "available_seats" do %>
 	<% unless @bus.nil? || @reservation.nil? %>
+	<% if @date >= Date.current %>
 	<div class = "container mt-4 text-center">
 		<div class = "row flex justify-content-center m-4 shadow" style  = "border-radius:10px;">
 			<div class = "card-header bg-dark  text-center text-danger py-2 mb-3 xx">
@@ -44,6 +45,7 @@
 			<% end %>
 		</div>
 	</div>
+	<% end %>
 	<% end %>
 <% end %>
 

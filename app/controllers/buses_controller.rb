@@ -3,57 +3,13 @@ class BusesController < ApplicationController
   before_action :authorize_user, only: [:edit, :update, :destroy, :index, :new]
 
   def reservations_list
-    @date = params[:date] ? params[:date] : Time.zone.now.to_date.to_s
+    @date = params[:date] || Time.zone.today.to_s
     @bus = Bus.find(params[:bus_id])
     authorize @bus
 
-    @reservations = Reservation.joins(:bus, :seat, :user).where("reservations.date = ? and buses.id = ?", @date, params[:bus_id]).group("reservations.id").select("reservations.id as r_id, MAX(users.name) as u_name, MAX(users.id) as u_id, MAX(seats.seat_no) as s_n, MAX(seats.id) as s_id").map { |r| r.attributes }
+    @reservations = Buses::ReservationsListQuery.call(@bus, @date)
+    @arr = Buses::WeeklyStatsChartQuery.call(current_user)
 
-    current_week_start = Date.today.beginning_of_week
-    current_week_end = Date.today.end_of_week
-
-    # day_selects = []
-    # (0..6).each do |offset|
-    #   current_day = current_week_start + offset.days
-    #   day_select = "SUM(CASE WHEN reservations.date = '#{current_day}' THEN 1 ELSE 0 END) AS #{current_day.strftime("%A").downcase}"
-    #   day_selects << day_select
-    # end
-
-    # select_expression = day_selects.join(", ")
-
-    # arr = current_user.buses.approved
-    #   .left_outer_joins(:reservations)
-    #   .where("reservations.date BETWEEN ? AND ? OR reservations.id IS NULL OR reservations.bus_id IS NULL", current_week_start, current_week_end)
-    #   .group("buses.id, buses.name")
-    #   .select("buses.name AS name, #{select_expression}")
-
-    arr = current_user.buses.approved
-      .left_outer_joins(:reservations)
-      .where("reservations.date BETWEEN ? AND ? OR reservations.id IS NULL OR reservations.bus_id IS NULL", current_week_start, current_week_end)
-      .group("buses.id, buses.name")
-      .select("buses.name AS name,
-                                 SUM(CASE WHEN reservations.date = '#{current_week_start}' THEN 1 ELSE 0 END) AS monday,
-                                 SUM(CASE WHEN reservations.date = '#{current_week_start + 1.day}' THEN 1 ELSE 0 END) AS tuesday,
-                                 SUM(CASE WHEN reservations.date = '#{current_week_start + 2.days}' THEN 1 ELSE 0 END) AS wednesday,
-                                 SUM(CASE WHEN reservations.date = '#{current_week_start + 3.days}' THEN 1 ELSE 0 END) AS thursday,
-                                 SUM(CASE WHEN reservations.date = '#{current_week_start + 4.days}' THEN 1 ELSE 0 END) AS friday,
-                                 SUM(CASE WHEN reservations.date = '#{current_week_start + 5.days}' THEN 1 ELSE 0 END) AS saturday,
-                                 SUM(CASE WHEN reservations.date = '#{current_week_start + 6.days}' THEN 1 ELSE 0 END) AS sunday")
-
-    @arr = arr.map do |r| 
-      {
-        name: r.name,
-        data: {
-          "Monday" => r["monday"].to_i,
-          "Tuesday" => r["tuesday"].to_i,
-          "Wednesday" => r["wednesday"].to_i,
-          "Thursday" => r["thursday"].to_i,
-          "Friday" => r["friday"].to_i,
-          "Saturday" => r["saturday"].to_i,
-          "Sunday" => r["sunday"].to_i,
-        }
-      }     
-    end
     respond_to do |format|
       format.html { render :reservations_list }
     end
@@ -67,7 +23,6 @@ class BusesController < ApplicationController
   def show
     @busowner = User.find(params[:bus_owner_id])
     @bus = @busowner.buses.find(params[:id])
-    # @bus = @busowner.buses.includes(:main_image_attachment, :blob).find(params[:id])
     respond_to do |format|
       format.html { render :show }
       format.json { render json: { bus: @bus, bus_owner: @busowner } }

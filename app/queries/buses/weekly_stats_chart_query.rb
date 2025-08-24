@@ -6,7 +6,7 @@ module Buses
 
       records = user.buses.approved
         .left_outer_joins(:reservations)
-        .where("reservations.date BETWEEN ? AND ? OR reservations.id IS NULL OR reservations.bus_id IS NULL", week_start, week_end)
+        #.where("reservations.date BETWEEN ? AND ? OR reservations.id IS NULL OR reservations.bus_id IS NULL", week_start, week_end)
         .group("buses.id, buses.name")
         .select(<<~SQL)
           buses.name AS name,
@@ -45,7 +45,7 @@ module Buses
 
       records = user.buses.approved
         .left_outer_joins(:reservations)
-        .where("reservations.date BETWEEN ? AND ? OR reservations.id IS NULL OR reservations.bus_id IS NULL", week_start, week_end)
+        #.where("reservations.date BETWEEN ? AND ? OR reservations.id IS NULL OR reservations.bus_id IS NULL", week_start, week_end)
         .group("buses.id, buses.name")
         .select("buses.name AS name, #{day_case_sql(week_start)}")
 

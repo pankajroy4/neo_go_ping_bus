@@ -75,3 +75,40 @@ module Buses
     end
   end
 end
+
+
+module Buses
+  class WeeklyStatsChartQuery
+    def self.call(user, as_of: Time.zone.today)
+      week_start = as_of.beginning_of_week
+      week_end   = as_of.end_of_week
+
+      records = Bus
+        .merge(user.buses.approved)
+        .joins(<<~SQL)
+          LEFT OUTER JOIN reservations
+            ON reservations.bus_id = buses.id
+           AND reservations.date BETWEEN '#{week_start}' AND '#{week_end}'
+        SQL
+        .group("buses.id, buses.name")
+        .select("buses.name AS name, #{day_case_sql(week_start)}")
+
+      build_series(records, week_start)
+    end
+
+    def self.day_case_sql(start_date)
+      (0..6).map do |offset|
+        day = start_date + offset.days
+        "SUM(CASE WHEN reservations.date = '#{day}' THEN 1 ELSE 0 END) AS #{day.strftime('%A').downcase}"
+      end.join(", ")
+    end
+
+    def self.build_series(records, start_date)
+      day_names = (0..6).map { |i| (start_date + i.days).strftime('%A') }
+      records.map do |r|
+        data = day_names.each_with_object({}) { |dn, h| h[dn] = r[dn.downcase].to_i }
+        { name: r.name, data: data }
+      end
+    end
+  end
+end
